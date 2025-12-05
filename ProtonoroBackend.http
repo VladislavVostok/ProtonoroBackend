@@ -1,0 +1,6 @@
+@ProtonoroBackend_HostAddress = http://localhost:5018
+
+GET {{ProtonoroBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
