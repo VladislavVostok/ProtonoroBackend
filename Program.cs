@@ -29,13 +29,6 @@ namespace ProtonoroBackend
                 });
             });
 
-            builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
-            {
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireUppercase = false;
-            })
-            .AddEntityFrameworkStores<PomodoroDBContext>();
 
 
             var configuration = new ConfigurationBuilder()
@@ -69,12 +62,22 @@ namespace ProtonoroBackend
                 };
             });
 
-            builder.Services.AddDbContext<PomodoroDBContext>(options =>
-             options.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlSConnectionString")));
+            //builder.Services.AddDbContext<PomodoroDBContext>(options =>
+            // options.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlSConnectionString")));            
 
-            builder.Services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<PomodoroDBContext>()
-                .AddDefaultTokenProviders();
+            builder.Services.AddDbContext<PomodoroDBContext>(options =>
+                options.UseSqlite("Data Source=helloapp.db")
+            );
+
+
+            builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireUppercase = false;
+            })
+            .AddEntityFrameworkStores<PomodoroDBContext>()
+            .AddDefaultTokenProviders();
 
             builder.Services.AddControllers();
 
@@ -90,11 +93,11 @@ namespace ProtonoroBackend
 
             var app = builder.Build();
 
-            if (app.Environment.IsProduction())
-            {
+            //if (app.Environment.IsProduction())
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
 
 
             app.UseHttpsRedirection();
